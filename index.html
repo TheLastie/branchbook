@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17232a">
+  <meta name="description" content="Колокольчик в отлив — интерактивная повесть о затерянном острове, старом маяке и выборе, который меняет финал истории.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Колокольчик в отлив — интерактивная повесть">
+  <meta property="og:description" content="Письмо, туман и несколько дорог к маяку. Выбирайте путь и читайте историю, которая запоминает ваши решения.">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="screenshots/branchbook.png">
+  <title>Колокольчик в отлив — интерактивная повесть</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23cf745a' d='M16 4c-5 0-8 4-8 9v7l-3 4h22l-3-4v-7c0-5-3-9-8-9zm-3 23h6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"The Bell at Low Water","applicationCategory":"GameApplication","operatingSystem":"Any","inLanguage":["ru","en"],"description":"An interactive branching novella where the reader's choices shape the route through a fogbound island and determine the ending."}</script>
+</head>
+<body>
+  <div class="night-sky" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="page-shell">
+    <header class="masthead">
+      <a class="brand" href="./"><span class="brand-mark"><i></i><i></i></span><span>BRANCH<br><b>BOOK</b></span></a>
+      <div class="masthead-center"><span>ИНТЕРАКТИВНАЯ ПОВЕСТЬ</span><b>·</b><span>КНИГА I</span></div>
+      <div class="reader-tools"><button id="textSmaller" type="button" aria-label="Уменьшить текст">A−</button><button id="textLarger" type="button" aria-label="Увеличить текст">A+</button><button id="themeButton" type="button" aria-label="Переключить ночной режим" aria-pressed="false">☾</button><button id="restartButton" type="button">Сначала ↺</button></div>
+    </header>
+
+    <main>
+      <section class="story-heading">
+        <div class="heading-copy"><p class="eyebrow">ЗАПИСИ БЕРЕГОВОГО СМОТРИТЕЛЯ <span>·</span> ВЫПУСК 01</p><h1>Колокольчик<br><em>в отлив</em></h1><p class="deck">Тихая повесть о маяке, который не отмечен ни на одной карте.</p></div>
+        <figure class="cover-art" aria-label="Маяк среди тумана у скалистого берега"><svg viewBox="0 0 360 180" role="img" aria-labelledby="coverTitle"><title id="coverTitle">Маяк в тумане на берегу</title><defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#253b42"/><stop offset="1" stop-color="#17252c"/></linearGradient></defs><rect width="360" height="180" fill="url(#sea)"/><path d="M0 122Q58 109 106 125T211 119T360 123V180H0Z" fill="#111f25"/><path d="M30 132Q94 128 145 135T275 129T360 135" fill="none" stroke="#9a9a85" stroke-opacity=".3"/><path d="M160 122 172 53h19l13 69Z" fill="#c1b99e"/><path d="m171 59 2-17h17l4 17Z" fill="#d5ccad"/><path d="M169 43h24l-2-7h-20Z" fill="#d1755b"/><path d="M169 36h23l-4-11h-15Z" fill="#d9c797"/><path d="M171 25h19" stroke="#ede4ca" stroke-width="3"/><path d="M181 21V8" stroke="#d9c797"/><path d="M180 32 111 49M193 32l78 24" stroke="#e1c583" stroke-opacity=".56" stroke-width="2"/><path d="M0 70q55-11 110 0t110 0t140 0M0 93q55-11 110 0t110 0t140 0" fill="none" stroke="#e9e5d6" stroke-opacity=".12" stroke-width="13"/></svg><figcaption>БЕРЕГ, НЕ ОТМЕЧЕННЫЙ НА КАРТЕ</figcaption></figure>
+      </section>
+
+      <section class="reader-layout" aria-label="Чтение интерактивной повести">
+        <aside class="route-panel">
+          <div class="panel-top"><span class="eyebrow">ВАШ ПУТЬ</span><span class="route-count" id="routeCount">01</span></div>
+          <h2>Карта<br><em>решений</em></h2>
+          <div class="route-tree" id="routeTree" aria-live="polite"></div>
+          <div class="route-legend"><span><i class="legend-dot visited"></i> Пройдено</span><span><i class="legend-dot waiting"></i> Выбор</span></div>
+          <div class="reading-progress"><div class="progress-label"><span>История</span><b id="progressPercent">0%</b></div><div class="progress-track"><i id="progressBar"></i></div></div>
+        </aside>
+
+        <article class="reading-page" id="readingPage" aria-live="polite" aria-atomic="true">
+          <div class="page-meta"><span id="chapterLabel">ГЛАВА 01 <i>·</i> ПИСЬМО</span><span id="chapterPlace">ОСТРОВ КЛИН</span></div>
+          <div class="ornament" aria-hidden="true"><span></span><i>✳</i><span></span></div>
+          <h2 id="chapterTitle">Письмо с запахом дыма</h2>
+          <div class="story-copy" id="storyCopy"></div>
+          <div class="story-memory" id="storyMemory" hidden><span>ВЫ ЗАПОМНИЛИ</span><p id="memoryText"></p></div>
+          <div class="choice-area"><p class="choice-prompt" id="choicePrompt">С чего начать?</p><div class="choices" id="choices"></div></div>
+          <div class="page-number"><span>· · ·</span><b id="pageNumber">1</b><span>· · ·</span></div>
+        </article>
+
+        <aside class="notes-panel">
+          <div class="panel-top"><span class="eyebrow">НА ПОЛЯХ</span><span class="ink-mark">✎</span></div>
+          <h2>Заметки<br><em>читателя</em></h2>
+          <p class="note-lede">Некоторые вещи становятся ясны только после выбора.</p>
+          <div class="collected-notes" id="collectedNotes"></div>
+          <div class="save-note"><span class="save-icon">⌂</span><p>Путь сохранён в этом браузере.<br>Вернитесь, когда захотите продолжить.</p><span class="saved-state" id="savedState">СОХРАНЕНО</span></div>
+          <button class="map-button" id="mapToggle" type="button" aria-expanded="false">Показать карту острова <span>↗</span></button>
+        </aside>
+      </section>
+
+      <section class="island-map" id="islandMap" hidden><div class="map-drawing"><svg viewBox="0 0 900 230" aria-label="Схематичная карта острова"><path d="M0 120Q75 104 151 122t158 0t154-3t151 4t170-1v108H0Z" fill="#20353b"/><path d="M0 142q77-13 151 0t158 0t154-2t151 2t170-1" fill="none" stroke="#a5a38f" stroke-opacity=".4"/><path d="M86 116 150 64l52 48 68-65 65 71 61-49 72 51 51-62 72 62 55-43 86 45" fill="none" stroke="#b9b49d" stroke-width="2" stroke-dasharray="5 5"/><path d="M277 113v-43h12l8 43m-24-43h27m-20-9h14l-3-9h-8z" fill="#d2c9ac"/><path d="M538 117 550 80h13l12 37z" fill="#d2c9ac"/><circle cx="150" cy="111" r="5" fill="#cf745a"/><circle cx="577" cy="112" r="5" fill="#cf745a"/></svg></div><div class="map-caption"><span>СХЕМА СОСТАВЛЕНА ПО ПАМЯТИ</span><span>Расстояния не в масштабе</span></div></section>
+      <footer class="page-footer"><span>BRANCHBOOK / КНИГА ПЕРЕМЕННЫХ ДОРОГ</span><span>Листайте историю своим маршрутом</span><a href="README.md">Об этой книге ↗</a></footer>
+    </main>
+  </div>
+  <script src="app.js" defer></script>
+</body>
+</html>
