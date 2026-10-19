@@ -216,8 +216,8 @@
     const hasTrack = Boolean(ambientAudio.src);
     const playing = !ambientAudio.paused;
     musicButton.innerHTML = hasTrack ? (playing ? '♫ <span>Пауза</span>' : '♫ <span>Слушать</span>') : '♫ <span>Музыка</span>';
-    musicButton.setAttribute('aria-label', hasTrack ? (playing ? 'Поставить музыку на паузу' : 'Включить загруженную музыку') : 'Загрузить музыку из файла');
-    musicButton.title = hasTrack ? 'Ваш саундтрек воспроизводится только в этой вкладке' : 'Загрузите свой саундтрек из файла';
+    musicButton.setAttribute('aria-label', hasTrack ? (playing ? 'Поставить музыку на паузу' : 'Включить саундтрек Fogbound Island') : 'Загрузить музыку из файла');
+    musicButton.title = hasTrack ? 'Саундтрек Fogbound Island' : 'Загрузите свой саундтрек из файла';
     musicButton.classList.toggle('is-playing', playing);
   }
   musicButton.addEventListener('click', async () => {
