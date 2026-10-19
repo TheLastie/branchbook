@@ -22,7 +22,7 @@
     <header class="masthead">
       <a class="brand" href="./"><span class="brand-mark"><i></i><i></i></span><span>BRANCH<br><b>BOOK</b></span></a>
       <div class="masthead-center"><span>ИНТЕРАКТИВНАЯ ПОВЕСТЬ</span><b>·</b><span>КНИГА I</span></div>
-      <div class="reader-tools"><button id="textSmaller" type="button" aria-label="Уменьшить текст">A−</button><button id="textLarger" type="button" aria-label="Увеличить текст">A+</button><button id="themeButton" type="button" aria-label="Переключить ночной режим" aria-pressed="false">☾</button><button id="restartButton" type="button">Сначала ↺</button></div>
+      <div class="reader-tools"><button id="musicButton" type="button" aria-label="Загрузить музыку из файла" title="Выберите свой саундтрек">♫ <span>Музыка</span></button><input id="musicFile" type="file" accept="audio/*" hidden><audio id="ambientAudio" loop preload="none"></audio><button id="textSmaller" type="button" aria-label="Уменьшить текст">A−</button><button id="textLarger" type="button" aria-label="Увеличить текст">A+</button><button id="themeButton" type="button" aria-label="Переключить ночной режим" aria-pressed="false">☾</button><button id="restartButton" type="button">Сначала ↺</button></div>
     </header>
 
     <main>
@@ -43,8 +43,9 @@
         <article class="reading-page" id="readingPage" aria-live="polite" aria-atomic="true">
           <div class="page-meta"><span id="chapterLabel">ГЛАВА 01 <i>·</i> ПИСЬМО</span><span id="chapterPlace">ОСТРОВ КЛИН</span></div>
           <div class="ornament" aria-hidden="true"><span></span><i>✳</i><span></span></div>
-          <h2 id="chapterTitle">Письмо с запахом дыма</h2>
+          <h2 id="chapterTitle" tabindex="-1">Письмо с запахом дыма</h2>
           <div class="story-copy" id="storyCopy"></div>
+          <blockquote class="dialogue-note" id="dialogueNote" hidden><span id="dialogueSpeaker"></span><p id="dialogueText"></p></blockquote>
           <div class="story-memory" id="storyMemory" hidden><span>ВЫ ЗАПОМНИЛИ</span><p id="memoryText"></p></div>
           <div class="choice-area"><p class="choice-prompt" id="choicePrompt">С чего начать?</p><div class="choices" id="choices"></div></div>
           <div class="page-number"><span>· · ·</span><b id="pageNumber">1</b><span>· · ·</span></div>

@@ -2,7 +2,7 @@
   const $ = id => document.getElementById(id);
   const story = {
     letter: {
-      title: 'Письмо с запахом дыма', section: 'ПИСЬМО', place: 'ОСТРОВ КЛИН',
+      title: 'Письмо с запахом дыма', section: 'ПИСЬМО', place: 'ОСТРОВ КЛИН', mood: 'fog',
       paragraphs: [
         'Письмо приходит утром, вместе с пустой лодкой. На плотной бумаге остался след от мокрого пальца и всего одна строка: «Приезжай, пока море не вернуло колокол». Подписи нет, но почерк вы узнаёте.',
         'Остров Клин исчезает с обычных карт к вечеру. В порту говорят, что его маяк погас семнадцать лет назад. Всё это время туда никто не плавал. На причале ждёт лодочник и смотрит, как вы разглядываете письмо.'
@@ -12,7 +12,7 @@
       ]
     },
     cliff: {
-      title: 'Тропа над водой', section: 'ПОДЪЁМ', place: 'ЗАПАДНЫЙ УТЁС',
+      title: 'Тропа над водой', section: 'ПОДЪЁМ', place: 'ЗАПАДНЫЙ УТЁС', mood: 'stone',
       paragraphs: [
         'На тропе пахнет железом и мокрой хвоей. Море давно отступило, оставив на камнях блестящие полосы. Впереди темнеет маяк: не разрушенный, а словно вырезанный из ночи.',
         'Из башни доносится колокольный звон — один короткий удар, затем тишина. У подножия видна узкая тропа к обнажившемуся берегу.'
@@ -22,17 +22,27 @@
       ]
     },
     radio: {
-      title: 'Голос на частоте', section: 'СИГНАЛ', place: 'СТАРАЯ РАДИОРУБКА',
+      title: 'Голос на частоте', section: 'СИГНАЛ', place: 'СТАРАЯ РАДИОРУБКА', mood: 'signal',
       paragraphs: [
         'Радиорубка открыта, будто вас ждали. Катушка медленно вращается, хотя провод оборван. Из динамика звучит голос лодочника, только моложе и спокойнее.',
         '«Если маяк снова загорится, остров вспомнит дорогу домой». Потом голос спрашивает, нашли ли вы ключ от станции.'
       ], choices: [
-        { label: 'Назвать своё имя', next: 'cottage', note: 'Вы назвали своё имя. Голос повторил его без ошибки.' },
+        { label: 'Назвать своё имя', next: 'voice', note: 'Вы назвали своё имя. Голос повторил его без ошибки.' },
         { label: 'Записать сигнал на ленту', next: 'signal', note: 'Вы сохранили сигнал. На ленте слышен ещё один голос.' }
       ]
     },
+    voice: {
+      title: 'Имя, произнесённое дважды', section: 'ОТВЕТ', place: 'РАДИОРУБКА', mood: 'memory',
+      paragraphs: [
+        'Катушка останавливается. Из динамика доносится не ваше имя, а короткий вдох — тот самый, который мать делала перед тем, как сказать что-то важное. Вы не слышали его много лет, но узнаёте сразу.',
+        'На столе лежит карандаш. Он катится к краю карты и замирает у отметки дома на северной опушке. За окном, ниже утёса, вспыхивает огонёк.'
+      ], dialogue: { speaker: 'ГОЛОС ИЗ ДИНАМИКА', text: 'Если ты помнишь мой голос, не путай память с обещанием.' }, choices: [
+        { label: 'Проверить дом на опушке', next: 'cottage', note: 'Вы пошли к дому. Голос остался на частоте, но перестал звать.' },
+        { label: 'Спуститься за огоньком к воде', next: 'shore', note: 'Вы выбрали огонь на воде. На карте появилась линия, которой там не было.' }
+      ]
+    },
     wreck: {
-      title: 'То, что вынесло море', section: 'ОТЛИВ', place: 'НИЖНИЙ БЕРЕГ',
+      title: 'То, что вынесло море', section: 'ОТЛИВ', place: 'НИЖНИЙ БЕРЕГ', mood: 'tide',
       paragraphs: [
         'На песке лежит лодка с выцветшей меткой порта. Внутри сухо, хотя вокруг стоят лужи. В носу — медная коробка, а рядом в камнях кто-то оставил шерстяное пальто.',
         'Течение меняется. До следующей воды осталось немного, и проход назад медленно исчезает.'
@@ -42,7 +52,7 @@
       ]
     },
     cottage: {
-      title: 'Дом у кромки леса', section: 'СВИДЕТЕЛЬСТВО', place: 'СЕВЕРНАЯ ОПУШКА',
+      title: 'Дом у кромки леса', section: 'СВИДЕТЕЛЬСТВО', place: 'СЕВЕРНАЯ ОПУШКА', mood: 'hearth',
       paragraphs: [
         'В доме горит лампа. На столе расставлены три чашки, хотя стул только один. В ящике вы находите фотографию женщины у маяка — это ваша мать, но снимок сделан до вашего рождения.',
         'На обороте написано: «Не зажигай его ради меня». В это же мгновение снизу приходит новый сигнал — короткий и знакомый.'
@@ -52,55 +62,75 @@
       ]
     },
     keeper: {
-      title: 'Тот, кто держит свет', section: 'ВСТРЕЧА', place: 'МАЯК',
+      title: 'Тот, кто держит свет', section: 'ВСТРЕЧА', place: 'МАЯК', mood: 'lantern',
       paragraphs: [
         'Внутри пахнет солью и горячей пылью. На площадке у линзы стоит смотритель в пальто лодочника. Его лицо всё время кажется знакомым, но стоит моргнуть — и память отступает.',
         'Он протягивает вам ключ. «Если повернёшь его, остров увидят все. Если отпустишь — никто больше не найдёт сюда дороги». Внизу снова начинает прибывать море.'
       ], choices: [
+        { label: 'Спросить, кого удерживает свет', next: 'threshold', note: 'Вы попросили назвать того, кто должен остаться. Смотритель ответил не сразу.' },
+        { label: 'Попросить рассказать о ключе', next: 'threshold', note: 'Вы не стали решать вслепую. Смотритель повернул ключ в ладони.' }
+      ]
+    },
+    threshold: {
+      title: 'Перед тем как повернуть ключ', section: 'ПОСЛЕДНИЙ РАЗГОВОР', place: 'КОМНАТА ЛИНЗЫ', mood: 'brass',
+      paragraphs: [
+        'Смотритель кладёт ключ на подоконник. Линза медленно собирает в нём бледный свет, и по стенам проходят полосы, похожие на строки письма. В каждой не хватает одного слова.',
+        'За стеклом море возвращается к острову. Теперь выбор касается не того, вернётся ли свет, а того, кому он оставит дорогу.'
+      ], dialogue: { speaker: 'СМОТРИТЕЛЬ', text: 'Свет ничего не возвращает. Он только показывает, что ты готов оставить открытым.' }, choices: [
         { label: 'Зажечь свет и остаться у линзы', next: 'beacon', note: 'Вы выбрали свет. Теперь кому-то придётся остаться.' },
-        { label: 'Отдать ключ смотрителю', next: 'release', note: 'Вы вернули ключ. Колокол замолчал впервые за много лет.' }
+        { label: 'Отпустить ключ и закрыть ставни', next: 'release', note: 'Вы вернули ключ. Колокол замолчал впервые за много лет.' }
       ]
     },
     signal: {
-      title: 'Запись с другого берега', section: 'ВОСПРОИЗВЕДЕНИЕ', place: 'РАДИОРУБКА',
+      title: 'Запись с другого берега', section: 'ВОСПРОИЗВЕДЕНИЕ', place: 'РАДИОРУБКА', mood: 'silver',
       paragraphs: [
         'На ленте слышны прибой, скрип двери и ваше дыхание. Затем — тихий голос: «Домой — значит туда, где тебя помнят». Запись заканчивается до того, как вы успеваете ответить.',
         'За окном виден маяк. Свет не зажжён, но на воде уже лежит тонкая светлая дорожка.'
       ], choices: [
-        { label: 'Направить луч к материковому берегу', next: 'home', note: 'Вы направили свет прочь от острова. На горизонте зажёгся ответ.' },
+        { label: 'Пойти по световой дорожке', next: 'shore', note: 'Вы пошли за светом. Прибой повторял ритм записи.' },
         { label: 'Оставить луч над морем', next: 'lost', note: 'Вы позволили свету остаться над водой. Кто-то ответил из тумана.' }
       ]
     },
+    shore: {
+      title: 'Линия, которой не было', section: 'НИЖНЯЯ ВОДА', place: 'ВНЕШНИЙ БЕРЕГ', mood: 'open-sea',
+      paragraphs: [
+        'По световой дорожке можно идти, не замочив обуви. Под прозрачной водой видны камни, раковины и белая черта старой приливной отметки. Она продолжается прямо под волны.',
+        'На другом конце мигает огонь. Он может быть берегом, лодкой или отражением маяка — но теперь вы знаете: ответ не всегда означает приглашение.'
+      ], dialogue: { speaker: 'ЗАПИСЬ В ПАМЯТИ', text: 'Домой — это не место, а тот, кто узнает твой голос.' }, choices: [
+        { label: 'Направить свет к материку и вернуться', next: 'home', note: 'Вы выбрали обратный путь. На горизонте зажглись три ответных огня.' },
+        { label: 'Плыть к огню, которого нет на карте', next: 'lost', note: 'Вы выбрали неизвестный берег. Карта закончилась раньше моря.' }
+      ]
+    },
     beacon: {
-      title: 'Новый смотритель', section: 'ФИНАЛ · I', place: 'МАЯК', ending: true,
+      title: 'Новый смотритель', section: 'ФИНАЛ · I', place: 'МАЯК', ending: true, mood: 'dawn',
       paragraphs: [
         'Когда линза начинает вращаться, остров возвращается в сумерки. В порту загораются окна, а колокол отвечает ему с берега. На новой карте появится ещё один остров — ваш, хотя вы не помните, чтобы когда-либо здесь жили.',
         'Смотритель спускается по лестнице налегке. Перед тем как уйти, он оставляет вам колокольный язык — тёплый, как ладонь.'
       ], memory: 'Свет оставляет дорогу открытой. Иногда это и есть дом.', choices: []
     },
     release: {
-      title: 'Без звонка', section: 'ФИНАЛ · II', place: 'МАЯК', ending: true,
+      title: 'Без звонка', section: 'ФИНАЛ · II', place: 'МАЯК', ending: true, mood: 'fog',
       paragraphs: [
         'Вы отдаёте ключ. Смотритель закрывает ладонь, и туман начинает уходить с воды. Остров становится меньше с каждым шагом вниз, но тропа не исчезает.',
         'У причала вас уже ждёт лодка. На обратном пути никто не говорит о маяке. Только ваше пальто пахнет дымом, который так и не успел разгореться.'
       ], memory: 'Вы отпустили остров, но оставили себе дорогу назад.', choices: []
     },
     home: {
-      title: 'Дальний огонь', section: 'ФИНАЛ · III', place: 'МОРЕ', ending: true,
+      title: 'Дальний огонь', section: 'ФИНАЛ · III', place: 'МОРЕ', ending: true, mood: 'dawn',
       paragraphs: [
         'С берега отвечают тремя короткими вспышками. Вы понимаете этот ритм, хотя никогда раньше его не слышали. На рассвете остров исчезает, но ваша лодка идёт прямо, будто путь домой всё это время был отмечен светом.',
         'Дома на столе лежит письмо. Бумага сухая и чистая. На ней появляется новая строка: «Спасибо, что выбрал дорогу».'
       ], memory: 'Вы указали путь другому берегу. Ответ всё-таки нашёл адресата.', choices: []
     },
     lost: {
-      title: 'Там, где начинается вода', section: 'ФИНАЛ · IV', place: 'ЗА ПРЕДЕЛАМИ КАРТЫ', ending: true,
+      title: 'Там, где начинается вода', section: 'ФИНАЛ · IV', place: 'ЗА ПРЕДЕЛАМИ КАРТЫ', ending: true, mood: 'deep',
       paragraphs: [
         'Из тумана приходит лодка без вёсел. В ней никого, только сложенная карта и ваш почерк на полях. Вы позволяете течению нести себя туда, где берег ещё не назвали.',
         'Наутро маяк гаснет. Но далеко за чертой привычного моря кто-то впервые видит его свет.'
       ], memory: 'Вы выбрали неизвестный маршрут. За картой начинается не пустота, а новая история.', choices: []
     },
     confession: {
-      title: 'Пустое место за столом', section: 'ФИНАЛ · V', place: 'ДОМ У ЛЕСА', ending: true,
+      title: 'Пустое место за столом', section: 'ФИНАЛ · V', place: 'ДОМ У ЛЕСА', ending: true, mood: 'hearth',
       paragraphs: [
         'Вы рассказываете всё, что знаете, и всё, чего не знаете. В третьей чашке появляется тёплый чай. Никто не входит в комнату, но лампа больше не дрожит от ветра.',
         'Когда вы уходите, фотография остаётся на месте. В следующий раз на ней будет на одного человека больше.'
@@ -110,6 +140,8 @@
 
   const defaults = { current: 'letter', history: [], memories: [], night: false, large: false };
   let state = loadState();
+  let transitioning = false;
+  let activeMusicUrl = '';
   function loadState() {
     try { const saved = JSON.parse(localStorage.getItem('branchbook-state')); if (saved && story[saved.current] && Array.isArray(saved.history) && Array.isArray(saved.memories)) return { ...defaults, ...saved }; } catch (_) { /* Start fresh if saved progress is unreadable. */ }
     return { ...defaults };
@@ -135,9 +167,13 @@
   }
   function renderStory() {
     const node = story[state.current];
+    document.body.dataset.atmosphere = node.mood || 'fog';
+    $('readingPage').dataset.atmosphere = node.mood || 'fog';
     $('chapterLabel').innerHTML = `${node.section.startsWith('ФИНАЛ') ? node.section : `ГЛАВА ${String(state.history.length + 1).padStart(2, '0')} · ${node.section}`}`;
     $('chapterPlace').textContent = node.place; $('chapterTitle').textContent = node.title;
     const copy = $('storyCopy'); copy.replaceChildren(); node.paragraphs.forEach(text => copy.append(h('p', '', text)));
+    const dialogue = $('dialogueNote'); dialogue.hidden = !node.dialogue;
+    if (node.dialogue) { $('dialogueSpeaker').textContent = node.dialogue.speaker; $('dialogueText').textContent = `«${node.dialogue.text}»`; }
     const memoryBox = $('storyMemory'); memoryBox.hidden = !node.memory; if (node.memory) $('memoryText').textContent = node.memory;
     $('choicePrompt').textContent = node.ending ? 'Вы дошли до конца этой дороги.' : 'Что вы сделаете?';
     const choices = $('choices'); choices.replaceChildren();
@@ -153,9 +189,53 @@
     renderRoute(); renderNotes();
   }
   function choose(choice) {
-    state.history.push({ id: state.current, choice: choice.label }); state.memories.push(choice.note); state.current = choice.next; persist(); renderStory();
+    if (transitioning) return;
+    moveTo(() => {
+      state.history.push({ id: state.current, choice: choice.label }); state.memories.push(choice.note); state.current = choice.next;
+    });
   }
-  function restart() { state = { ...defaults, history: [], memories: [], night: state.night, large: state.large }; persist(); renderStory(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function moveTo(change) {
+    if (transitioning) return;
+    transitioning = true;
+    const page = $('readingPage');
+    page.classList.add('is-leaving');
+    window.setTimeout(() => {
+      change(); persist(); renderStory(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      page.classList.remove('is-leaving');
+      page.classList.add('is-arriving');
+      $('chapterTitle').focus({ preventScroll: true });
+      window.setTimeout(() => { page.classList.remove('is-arriving'); transitioning = false; }, 520);
+    }, 230);
+  }
+  function restart() {
+    moveTo(() => { state = { ...defaults, history: [], memories: [], night: state.night, large: state.large }; });
+  }
+
+  const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio');
+  function updateMusicButton() {
+    const hasTrack = Boolean(ambientAudio.src);
+    const playing = !ambientAudio.paused;
+    musicButton.innerHTML = hasTrack ? (playing ? '♫ <span>Пауза</span>' : '♫ <span>Слушать</span>') : '♫ <span>Музыка</span>';
+    musicButton.setAttribute('aria-label', hasTrack ? (playing ? 'Поставить музыку на паузу' : 'Включить загруженную музыку') : 'Загрузить музыку из файла');
+    musicButton.title = hasTrack ? 'Ваш саундтрек воспроизводится только в этой вкладке' : 'Загрузите свой саундтрек из файла';
+    musicButton.classList.toggle('is-playing', playing);
+  }
+  musicButton.addEventListener('click', async () => {
+    if (!ambientAudio.src) { musicFile.click(); return; }
+    if (ambientAudio.paused) { try { await ambientAudio.play(); } catch (_) { updateMusicButton(); } }
+    else ambientAudio.pause();
+  });
+  musicFile.addEventListener('change', () => {
+    const file = musicFile.files && musicFile.files[0];
+    if (!file) return;
+    if (activeMusicUrl) URL.revokeObjectURL(activeMusicUrl);
+    activeMusicUrl = URL.createObjectURL(file);
+    ambientAudio.src = activeMusicUrl;
+    updateMusicButton();
+  });
+  ambientAudio.addEventListener('play', updateMusicButton);
+  ambientAudio.addEventListener('pause', updateMusicButton);
+  ambientAudio.addEventListener('ended', updateMusicButton);
 
   $('restartButton').addEventListener('click', restart);
   $('textSmaller').addEventListener('click', () => { state.large = false; document.body.classList.remove('large-type'); persist(); });
@@ -164,5 +244,6 @@
   $('mapToggle').addEventListener('click', () => { const map = $('islandMap'), open = map.hidden; map.hidden = !open; $('mapToggle').setAttribute('aria-expanded', String(open)); $('mapToggle').firstChild.textContent = open ? 'Скрыть карту острова ' : 'Показать карту острова '; });
   document.body.classList.toggle('reader-night', state.night); document.body.classList.toggle('large-type', state.large);
   $('themeButton').textContent = state.night ? '☀' : '☾'; $('themeButton').setAttribute('aria-pressed', String(state.night));
+  updateMusicButton();
   renderStory();
 })();
