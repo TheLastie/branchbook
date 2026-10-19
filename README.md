@@ -16,7 +16,7 @@
 - Следить за своим маршрутом на карте решений.
 - Сохранять прогресс автоматически в браузере.
 - Видеть, как палитра страницы меняется вместе с местом и настроением сцены; переходы между главами напоминают переворот страницы.
-- Автоматически запускать «Fogbound Island» при открытии повести; если браузер блокирует звук, включить его кнопкой в шапке. Также можно увеличить текст, включить ночную тему и открыть схематичную карту острова.
+- Автоматически запускать «Fogbound Island» при открытии повести; если браузер блокирует звук, включить его кнопкой в шапке и настроить громкость ползунком. Также можно увеличить текст, включить ночную тему и открыть схематичную карту острова.
 - Начинать заново в любой момент.
 
 Саундтрек «Fogbound Island» включён в проект. Промпт для создания музыки находится в [SUNO-PROMPT.md](SUNO-PROMPT.md); через кнопку «Музыка» можно выбрать собственный файл.
@@ -37,7 +37,7 @@
 - Follow your route on a live decision map.
 - Progress is saved automatically in the browser.
 - Chapter colours shift with each place, with a quiet page-turn transition between scenes.
-- Start “Fogbound Island” automatically when the story opens; if the browser blocks autoplay, start it with the header button. Adjust reading size, switch to a night theme, and open a sketch map of the island.
+- Start “Fogbound Island” automatically when the story opens; if the browser blocks autoplay, start it with the header button and adjust its volume with the slider. Adjust reading size, switch to a night theme, and open a sketch map of the island.
 - Restart the story at any time.
 
 “Fogbound Island” is bundled with the project. The soundtrack prompt is in [SUNO-PROMPT.md](SUNO-PROMPT.md); use the “Музыка” control to choose another audio file.

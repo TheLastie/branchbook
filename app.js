@@ -211,8 +211,15 @@
     moveTo(() => { state = { ...defaults, history: [], memories: [], night: state.night, large: state.large }; });
   }
 
-  const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio');
+  const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio'), volumeControl = $('volumeControl');
   let autoplayBlocked = false;
+  const savedVolume = Number(localStorage.getItem('branchbook-volume'));
+  if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 100) volumeControl.value = String(savedVolume);
+  ambientAudio.volume = Number(volumeControl.value) / 100;
+  volumeControl.addEventListener('input', () => {
+    ambientAudio.volume = Number(volumeControl.value) / 100;
+    localStorage.setItem('branchbook-volume', volumeControl.value);
+  });
   function updateMusicButton() {
     const hasTrack = Boolean(ambientAudio.src);
     const playing = !ambientAudio.paused;

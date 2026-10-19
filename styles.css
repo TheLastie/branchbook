@@ -46,9 +46,11 @@ body[data-atmosphere="deep"]{--rust:#8791b0;--gold:#bab8ad;--sea:#535e77;--atmos
 .reader-tools #musicButton{display:flex;align-items:center;gap:5px;border-color:#56645e;color:#d9c89e;min-width:32px}
 .reader-tools #musicButton.is-playing{border-color:var(--gold);color:var(--gold)}
 .reader-tools #musicButton span{font:8px var(--sans)}
+.volume-control{height:27px;display:flex;align-items:center;gap:5px;padding:4px 7px;border:1px solid #45504c;border-radius:2px;color:#d9c89e}.volume-control span{font:12px var(--serif)}.volume-control input{width:68px;height:14px;margin:0;accent-color:var(--gold);cursor:pointer}.volume-control input:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
 .reader-tools button:focus-visible,.choice-button:focus-visible,.map-button:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
 #chapterTitle:focus{outline:none}
 body[data-atmosphere="open-sea"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#314c61 0,transparent 58%)}
 body[data-atmosphere="hearth"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#4d3b35 0,transparent 56%)}
 body[data-atmosphere="deep"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#34394f 0,transparent 58%)}
-@media(max-width:520px){.reader-tools #musicButton span{display:none}.dialogue-note{margin-bottom:9px}.dialogue-note p{font-size:14px}}
+@media(max-width:760px){.volume-control{gap:3px;padding:4px 5px}.volume-control input{width:52px}}
+@media(max-width:520px){.reader-tools #musicButton span{display:none}.volume-control{height:26px;gap:2px;padding:4px}.volume-control input{width:44px}.dialogue-note{margin-bottom:9px}.dialogue-note p{font-size:14px}}
