@@ -212,12 +212,13 @@
   }
 
   const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio');
+  let autoplayBlocked = false;
   function updateMusicButton() {
     const hasTrack = Boolean(ambientAudio.src);
     const playing = !ambientAudio.paused;
     musicButton.innerHTML = hasTrack ? (playing ? '♫ <span>Пауза</span>' : '♫ <span>Слушать</span>') : '♫ <span>Музыка</span>';
     musicButton.setAttribute('aria-label', hasTrack ? (playing ? 'Поставить музыку на паузу' : 'Включить саундтрек Fogbound Island') : 'Загрузить музыку из файла');
-    musicButton.title = hasTrack ? 'Саундтрек Fogbound Island' : 'Загрузите свой саундтрек из файла';
+    musicButton.title = autoplayBlocked ? 'Браузер блокирует автозапуск. Нажмите, чтобы включить звук.' : hasTrack ? 'Саундтрек Fogbound Island' : 'Загрузите свой саундтрек из файла';
     musicButton.classList.toggle('is-playing', playing);
   }
   musicButton.addEventListener('click', async () => {
@@ -233,7 +234,7 @@
     ambientAudio.src = activeMusicUrl;
     updateMusicButton();
   });
-  ambientAudio.addEventListener('play', updateMusicButton);
+  ambientAudio.addEventListener('play', () => { autoplayBlocked = false; updateMusicButton(); });
   ambientAudio.addEventListener('pause', updateMusicButton);
   ambientAudio.addEventListener('ended', updateMusicButton);
 
@@ -246,4 +247,8 @@
   $('themeButton').textContent = state.night ? '☀' : '☾'; $('themeButton').setAttribute('aria-pressed', String(state.night));
   updateMusicButton();
   renderStory();
+  ambientAudio.play().catch(() => {
+    autoplayBlocked = true;
+    updateMusicButton();
+  });
 })();
