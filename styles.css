@@ -55,3 +55,29 @@ body[data-atmosphere="deep"] .night-sky{background:radial-gradient(ellipse at 72
 @media(max-width:760px){.volume-control{gap:3px;padding:4px 5px}.volume-control input{width:52px}}
 @media(max-width:520px){.reader-tools #musicButton span{display:none}.volume-control{height:26px;gap:2px;padding:4px}.volume-control input{width:44px}.dialogue-note{margin-bottom:9px}.dialogue-note p{font-size:14px}}
 @media(max-width:760px){.route-tree{flex-wrap:wrap;overflow:visible;max-height:none;gap:3px 12px}.route-node{flex:0 1 calc(50% - 6px);min-width:0;white-space:normal;line-height:1.25}.route-node .node-mark{flex:none;white-space:nowrap}}
+
+/* The new story's atmosphere follows the working conditions at the lighthouse. */
+body[data-atmosphere="automation"]{--rust:#bb795a;--gold:#d0aa6e;--sea:#4e6a72;--atmosphere-rgb:179 118 82}
+body[data-atmosphere="manual"]{--rust:#a66e4e;--gold:#d0b77e;--sea:#627b70;--atmosphere-rgb:161 112 76}
+body[data-atmosphere="storm"]{--rust:#d07d5a;--gold:#b8b7a9;--sea:#465d70;--atmosphere-rgb:108 130 152}
+body[data-atmosphere="hybrid"]{--rust:#b28153;--gold:#dfc07b;--sea:#557773;--atmosphere-rgb:158 146 104}
+body[data-atmosphere="evacuation"]{--rust:#c7835a;--gold:#d0aa77;--sea:#63706d;--atmosphere-rgb:184 132 87}
+body[data-atmosphere="gas"]{--rust:#b99756;--gold:#9da18b;--sea:#657363;--atmosphere-rgb:154 152 89}
+body[data-atmosphere="paper"]{--rust:#a97856;--gold:#c7b582;--sea:#697b73;--atmosphere-rgb:173 142 102}
+body[data-atmosphere="manual"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#453c31 0,transparent 58%)}
+body[data-atmosphere="storm"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#263c50 0,transparent 60%)}
+body[data-atmosphere="gas"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#394235 0,transparent 60%)}
+.state-readout{display:grid;gap:10px;padding:1px 0 12px;border-bottom:1px solid #cfc4b1}
+.state-meter-head{display:flex;justify-content:space-between;gap:8px;color:#77796f;font:9px var(--sans)}
+.state-meter-head b{color:#52584f;font:9px var(--mono);font-weight:400}
+.state-meter-track{height:3px;margin-top:5px;background:#d8d0c1;overflow:hidden}
+.state-meter-track i{display:block;height:100%;background:var(--sea);transition:width .35s ease,background-color .35s ease}
+.state-risk .state-meter-track i{background:#b97858}
+.state-time .state-meter-track i{background:#c5a96d}
+.state-knowledge .state-meter-track i{background:#778e7b}
+.reader-night .state-readout{border-color:#505951}
+.reader-night .state-meter-head,.reader-night .state-meter-head b{color:#c1c4b6}
+.reader-night .state-meter-track{background:#505951}
+.empty-choices{margin:0;color:#8a6d59;font:italic 13px/1.5 var(--serif)}
+@media(max-width:760px){.state-readout{grid-template-columns:1fr 1fr;gap:9px 12px}.notes-panel{min-width:0}}
+@media(max-width:520px){.state-readout{gap:9px 14px;padding-bottom:11px}.state-meter-head,.state-meter-head b{font-size:8px}}

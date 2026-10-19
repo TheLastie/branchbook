@@ -1,6 +1,6 @@
 (() => {
   const $ = id => document.getElementById(id);
-  const story = {
+  const legacyStory = {
     letter: {
       title: 'Письмо с запахом дыма', section: 'ПИСЬМО', place: 'ОСТРОВ КЛИН', mood: 'fog',
       paragraphs: [
@@ -138,60 +138,103 @@
     }
   };
 
-  const defaults = { current: 'letter', history: [], memories: [], night: false, large: false };
+  const story = window.BRANCHBOOK_STORY || legacyStory;
+  const defaults = {
+    current: 'S01', history: [], memories: [],
+    vars: { knowledge: 0, lighthouse: 7, time: 5, risk: 2, contract: 0 },
+    flags: {}, night: false, large: false
+  };
   let state = loadState();
   let transitioning = false;
   let activeMusicUrl = '';
   function loadState() {
-    try { const saved = JSON.parse(localStorage.getItem('branchbook-state')); if (saved && story[saved.current] && Array.isArray(saved.history) && Array.isArray(saved.memories)) return { ...defaults, ...saved }; } catch (_) { /* Start fresh if saved progress is unreadable. */ }
+    try {
+      const saved = JSON.parse(localStorage.getItem('branchbook-state'));
+      if (saved && story[saved.current] && Array.isArray(saved.history) && Array.isArray(saved.memories)) {
+        return { ...defaults, ...saved, vars: { ...defaults.vars, ...(saved.vars || {}) }, flags: { ...(saved.flags || {}) } };
+      }
+    } catch (_) { /* Start fresh if saved progress is unreadable. */ }
     return { ...defaults };
   }
   function persist() { localStorage.setItem('branchbook-state', JSON.stringify(state)); $('savedState').textContent = 'СОХРАНЕНО'; }
   function h(tag, className, text) { const element = document.createElement(tag); if (className) element.className = className; if (text) element.textContent = text; return element; }
+  function meets(conditions = {}) {
+    return Object.entries(conditions).every(([key, value]) => {
+      if (key === 'flags') return Object.entries(value).every(([flag, expected]) => Boolean(state.flags[flag]) === expected);
+      if (key === 'max') return Object.entries(value).every(([stat, limit]) => Number(state.vars[stat] || 0) <= Number(limit));
+      return Number(state.vars[key] || 0) >= Number(value);
+    });
+  }
+  function availableChoices(node) { return (node.choices || []).filter(choice => meets(choice.when)); }
   function renderRoute() {
     const tree = $('routeTree'); tree.replaceChildren();
     state.history.forEach((entry, index) => {
       const row = h('div', 'route-node'); row.append(h('span', '', story[entry.id].title)); row.append(h('span', 'node-mark', String(index + 1).padStart(2, '0'))); tree.append(row);
     });
     const current = story[state.current], row = h('div', 'route-node is-current'); row.append(h('span', '', current.title)); row.append(h('span', 'node-mark', current.ending ? 'ФИНАЛ' : 'СЕЙЧАС')); tree.append(row);
-    if (!current.ending) current.choices.forEach(choice => { const branch = h('div', 'route-node is-choice'); branch.append(h('span', '', choice.label)); tree.append(branch); });
+    if (!current.ending) availableChoices(current).forEach(choice => { const branch = h('div', 'route-node is-choice'); branch.append(h('span', '', choice.label)); tree.append(branch); });
     $('routeCount').textContent = String(state.history.length + 1).padStart(2, '0');
-    const percent = current.ending ? 100 : Math.min(92, Math.round((state.history.length + 1) / 7 * 100));
+    const visited = new Set([...state.history.map(entry => entry.id), state.current]).size;
+    const percent = current.ending ? 100 : Math.min(96, Math.round(visited / Object.keys(story).length * 100));
     $('progressPercent').textContent = `${percent}%`; $('progressBar').style.width = `${percent}%`;
     tree.scrollTop = tree.scrollHeight;
   }
   function renderNotes() {
     const list = $('collectedNotes'); list.replaceChildren();
-    if (!state.memories.length) { list.append(h('p', 'empty-notes', 'Пока здесь только чистая страница. Ваши решения оставят на полях первые следы.')); return; }
+    const meters = h('section', 'state-readout'); meters.setAttribute('aria-label', 'Условия у маяка');
+    const stats = [
+      ['Состояние маяка', state.vars.lighthouse, 10, 'lighthouse'],
+      ['Риск для города', state.vars.risk, 10, 'risk'],
+      ['Дней до шторма', state.vars.time, 5, 'time'],
+      ['Собранные данные', state.vars.knowledge, 5, 'knowledge'],
+      ['Выполнение работ', state.vars.contract, 3, 'contract']
+    ];
+    stats.forEach(([label, value, max, kind]) => {
+      const row = h('div', `state-meter state-${kind}`);
+      const head = h('div', 'state-meter-head'); head.append(h('span', '', label), h('b', '', `${value}/${max}`));
+      const track = h('div', 'state-meter-track'); track.setAttribute('role', 'progressbar'); track.setAttribute('aria-label', label); track.setAttribute('aria-valuemin', '0'); track.setAttribute('aria-valuemax', String(max)); track.setAttribute('aria-valuenow', String(value));
+      const fill = h('i', ''); fill.style.width = `${Math.max(0, Math.min(100, value / max * 100))}%`; track.append(fill); row.append(head, track); meters.append(row);
+    });
+    list.append(meters);
+    if (!state.memories.length) { list.append(h('p', 'empty-notes', 'Наблюдения и решения будут записаны здесь.')); return; }
     state.memories.slice(-4).reverse().forEach((memory, i) => { const card = h('article', 'note-card'); card.append(h('span', '', `ЗАПИСЬ ${String(state.memories.length - i).padStart(2, '0')}`)); card.append(h('p', '', memory)); list.append(card); });
   }
   function renderStory() {
     const node = story[state.current];
     document.body.dataset.atmosphere = node.mood || 'fog';
     $('readingPage').dataset.atmosphere = node.mood || 'fog';
-    $('chapterLabel').innerHTML = `${node.section.startsWith('ФИНАЛ') ? node.section : `ГЛАВА ${String(state.history.length + 1).padStart(2, '0')} · ${node.section}`}`;
+    $('chapterLabel').textContent = node.ending ? `ФИНАЛ · ${node.endingId}` : `СЦЕНА ${String(state.history.length + 1).padStart(2, '0')} · ${node.section}`;
     $('chapterPlace').textContent = node.place; $('chapterTitle').textContent = node.title;
     const copy = $('storyCopy'); copy.replaceChildren(); node.paragraphs.forEach(text => copy.append(h('p', '', text)));
     const dialogue = $('dialogueNote'); dialogue.hidden = !node.dialogue;
     if (node.dialogue) { $('dialogueSpeaker').textContent = node.dialogue.speaker; $('dialogueText').textContent = `«${node.dialogue.text}»`; }
     const memoryBox = $('storyMemory'); memoryBox.hidden = !node.memory; if (node.memory) $('memoryText').textContent = node.memory;
-    $('choicePrompt').textContent = node.ending ? 'Вы дошли до конца этой дороги.' : 'Что вы сделаете?';
+    $('choicePrompt').textContent = node.ending ? 'Эта история завершилась. Можно пройти другим путём.' : 'Что вы сделаете?';
     const choices = $('choices'); choices.replaceChildren();
     if (node.ending) {
       const button = h('button', 'choice-button'); button.type = 'button'; button.innerHTML = '<span class="choice-index">↺</span><span class="choice-label">Прочитать заново</span><span class="choice-arrow">↗</span>'; button.addEventListener('click', restart); choices.append(button);
-    } else node.choices.forEach((choice, index) => {
+    } else availableChoices(node).forEach((choice, index) => {
       const button = h('button', 'choice-button'); button.type = 'button';
       button.innerHTML = `<span class="choice-index">${String(index + 1).padStart(2, '0')}</span><span class="choice-label"></span><span class="choice-arrow">↗</span>`;
       button.querySelector('.choice-label').textContent = choice.label; button.addEventListener('click', () => choose(choice)); choices.append(button);
     });
+    if (!node.ending && !choices.childElementCount) choices.append(h('p', 'empty-choices', 'Ни один вариант сейчас недоступен. Вернитесь к журналу и проверьте условия.'));
     $('pageNumber').textContent = String(state.history.length + 1);
-    document.title = `${node.title} — Колокольчик в отлив`;
+    document.title = `${node.title} — Ритм берега`;
     renderRoute(); renderNotes();
   }
   function choose(choice) {
     if (transitioning) return;
+    if (!meets(choice.when)) return;
     moveTo(() => {
-      state.history.push({ id: state.current, choice: choice.label }); state.memories.push(choice.note); state.current = choice.next;
+      state.history.push({ id: state.current, choice: choice.label });
+      if (choice.note) state.memories.push(choice.note);
+      Object.entries(choice.effects || {}).forEach(([key, delta]) => {
+        const max = key === 'time' ? 5 : key === 'knowledge' ? 5 : key === 'contract' ? 3 : 10;
+        state.vars[key] = Math.max(0, Math.min(max, Number(state.vars[key] || 0) + Number(delta)));
+      });
+      Object.assign(state.flags, choice.flags || {});
+      state.current = choice.next;
     });
   }
   function moveTo(change) {
@@ -208,7 +251,7 @@
     }, 230);
   }
   function restart() {
-    moveTo(() => { state = { ...defaults, history: [], memories: [], night: state.night, large: state.large }; });
+    moveTo(() => { state = { ...defaults, vars: { ...defaults.vars }, flags: {}, history: [], memories: [], night: state.night, large: state.large }; });
   }
 
   const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio'), volumeControl = $('volumeControl');
