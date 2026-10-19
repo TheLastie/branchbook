@@ -256,6 +256,7 @@
 
   const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio'), volumeControl = $('volumeControl');
   let autoplayBlocked = false;
+  let unlockListenersAttached = false;
   const savedVolume = Number(localStorage.getItem('branchbook-volume'));
   if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 100) volumeControl.value = String(savedVolume);
   ambientAudio.volume = Number(volumeControl.value) / 100;
@@ -271,6 +272,28 @@
     musicButton.title = autoplayBlocked ? 'Браузер блокирует автозапуск. Нажмите, чтобы включить звук.' : hasTrack ? 'Саундтрек Fogbound Island' : 'Загрузите свой саундтрек из файла';
     musicButton.classList.toggle('is-playing', playing);
   }
+  function removeMusicUnlockListeners() {
+    window.removeEventListener('pointerdown', resumeMusicAfterGesture);
+    window.removeEventListener('keydown', resumeMusicAfterGesture);
+    unlockListenersAttached = false;
+  }
+  function resumeMusicAfterGesture(event) {
+    if (event.target instanceof Element && event.target.closest('#musicButton')) return;
+    ambientAudio.play().then(() => {
+      autoplayBlocked = false;
+      removeMusicUnlockListeners();
+      updateMusicButton();
+    }).catch(() => {
+      autoplayBlocked = true;
+      updateMusicButton();
+    });
+  }
+  function armMusicUnlock() {
+    if (unlockListenersAttached) return;
+    unlockListenersAttached = true;
+    window.addEventListener('pointerdown', resumeMusicAfterGesture);
+    window.addEventListener('keydown', resumeMusicAfterGesture);
+  }
   musicButton.addEventListener('click', async () => {
     if (!ambientAudio.src) { musicFile.click(); return; }
     if (ambientAudio.paused) { try { await ambientAudio.play(); } catch (_) { updateMusicButton(); } }
@@ -284,7 +307,7 @@
     ambientAudio.src = activeMusicUrl;
     updateMusicButton();
   });
-  ambientAudio.addEventListener('play', () => { autoplayBlocked = false; updateMusicButton(); });
+  ambientAudio.addEventListener('play', () => { autoplayBlocked = false; removeMusicUnlockListeners(); updateMusicButton(); });
   ambientAudio.addEventListener('pause', updateMusicButton);
   ambientAudio.addEventListener('ended', updateMusicButton);
 
@@ -300,5 +323,6 @@
   ambientAudio.play().catch(() => {
     autoplayBlocked = true;
     updateMusicButton();
+    armMusicUnlock();
   });
 })();
