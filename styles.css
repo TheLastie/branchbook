@@ -54,3 +54,4 @@ body[data-atmosphere="hearth"] .night-sky{background:radial-gradient(ellipse at 
 body[data-atmosphere="deep"] .night-sky{background:radial-gradient(ellipse at 72% 0%,#34394f 0,transparent 58%)}
 @media(max-width:760px){.volume-control{gap:3px;padding:4px 5px}.volume-control input{width:52px}}
 @media(max-width:520px){.reader-tools #musicButton span{display:none}.volume-control{height:26px;gap:2px;padding:4px}.volume-control input{width:44px}.dialogue-note{margin-bottom:9px}.dialogue-note p{font-size:14px}}
+@media(max-width:760px){.route-tree{flex-wrap:wrap;overflow:visible;max-height:none;gap:3px 12px}.route-node{flex:0 1 calc(50% - 6px);min-width:0;white-space:normal;line-height:1.25}.route-node .node-mark{flex:none;white-space:nowrap}}
