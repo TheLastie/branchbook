@@ -257,7 +257,8 @@
   const musicButton = $('musicButton'), musicFile = $('musicFile'), ambientAudio = $('ambientAudio'), volumeControl = $('volumeControl');
   let autoplayBlocked = false;
   let unlockListenersAttached = false;
-  const savedVolume = Number(localStorage.getItem('branchbook-volume'));
+  const savedVolumeValue = localStorage.getItem('branchbook-volume');
+  const savedVolume = savedVolumeValue === null ? NaN : Number(savedVolumeValue);
   if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 100) volumeControl.value = String(savedVolume);
   ambientAudio.volume = Number(volumeControl.value) / 100;
   volumeControl.addEventListener('input', () => {
